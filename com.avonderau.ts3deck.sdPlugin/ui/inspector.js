@@ -16,13 +16,28 @@
   let uuid = '';
   let action = '';
   let settings = {};
+  let waiting = null;
   const $ = (id) => document.getElementById(id);
 
   function send(event, payload) {
     if (ws && ws.readyState === 1) ws.send(JSON.stringify({ event, context: uuid, action, payload }));
   }
 
+  // expectReply warns when the plugin does not answer, which usually means
+  // its process is not running (see the key's title and the plugin log).
+  function expectReply(text) {
+    const el = $('status');
+    el.textContent = text;
+    el.className = 'status';
+    clearTimeout(waiting);
+    waiting = setTimeout(function () {
+      el.textContent = 'The plugin is not responding. If the key says "Plugin crashed" or "Plugin host offline", check the plugin log in ~/.local/state/OpenLinkHub/deck-plugins/logs/.';
+      el.className = 'status bad';
+    }, 4000);
+  }
+
   function showStatus(p) {
+    clearTimeout(waiting);
     const el = $('status');
     let text;
     let cls;
@@ -74,6 +89,7 @@
     ws.onopen = function () {
       ws.send(JSON.stringify({ event: registerEvent, uuid }));
       send('sendToPlugin', { type: 'status' });
+      expectReply('Checking…');
     };
     ws.onmessage = function (evt) {
       let msg;
@@ -96,5 +112,6 @@
       apiKey: $('apiKey').value || undefined,
     });
     $('apiKey').value = '';
+    expectReply('Saving…');
   });
 })();
