@@ -1,4 +1,4 @@
-# TeamSpeak 3 for Deck
+# TeamSpeak 3 for OpenDeck
 
 Deck keys that control the TeamSpeak 3 client and show what it is doing.
 The plugin is written for the Deck plugin host in
