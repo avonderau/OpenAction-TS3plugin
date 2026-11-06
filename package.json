@@ -1,0 +1,13 @@
+{
+  "name": "openaction-ts3plugin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "TeamSpeak 3 keys for OpenLinkHub Nexus Decks, Stream Deck and OpenDeck",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "icons": "python3 scripts/make-icons.py",
+    "pack": "sh scripts/pack.sh"
+  }
+}
