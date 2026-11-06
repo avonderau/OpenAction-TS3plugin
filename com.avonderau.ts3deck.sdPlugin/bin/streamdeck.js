@@ -3,6 +3,7 @@
 // plugin with -port, -pluginUUID, -registerEvent and -info.
 
 import { EventEmitter } from 'node:events';
+import { OPEN, WebSocketClient } from './websocket.js';
 
 export function parseArgs(argv) {
   const args = {};
@@ -28,30 +29,27 @@ export class StreamDeck extends EventEmitter {
   }
 
   connect() {
-    if (typeof WebSocket !== 'function') {
-      throw new Error('this plugin needs Node.js 22 or later (built-in WebSocket)');
-    }
-    const ws = new WebSocket(`ws://127.0.0.1:${this.port}`);
+    const ws = new WebSocketClient('127.0.0.1', Number(this.port));
     this.ws = ws;
-    ws.addEventListener('open', () => {
+    ws.on('open', () => {
       ws.send(JSON.stringify({ event: this.registerEvent, uuid: this.uuid }));
       this.emit('open');
     });
-    ws.addEventListener('message', (msg) => {
+    ws.on('message', (text) => {
       let data;
       try {
-        data = JSON.parse(typeof msg.data === 'string' ? msg.data : Buffer.from(msg.data).toString('utf8'));
+        data = JSON.parse(text);
       } catch {
         return;
       }
       if (data && typeof data.event === 'string') this.emit(data.event, data);
     });
-    ws.addEventListener('close', () => this.emit('close'));
-    ws.addEventListener('error', () => {});
+    ws.on('close', () => this.emit('close'));
+    ws.on('error', (err) => console.error(`Deck connection: ${err.message}`));
   }
 
   send(payload) {
-    if (this.ws?.readyState === 1) this.ws.send(JSON.stringify(payload));
+    if (this.ws?.readyState === OPEN) this.ws.send(JSON.stringify(payload));
   }
 
   setTitle(context, title) {

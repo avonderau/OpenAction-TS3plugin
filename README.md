@@ -31,8 +31,8 @@ inside TeamSpeak too.
 
 - TeamSpeak 3 client 3.1 or later, with the ClientQuery addon enabled
   (it is on by default).
-- Node.js 22 or later on your `PATH`. The plugin uses Node's built-in
-  WebSocket client and has no other dependencies.
+- Node.js 18 or later on your `PATH` (the distribution's `nodejs` package is
+  fine). The plugin has no npm dependencies.
 
 ## Install
 

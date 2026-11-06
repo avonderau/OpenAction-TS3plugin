@@ -4,7 +4,7 @@
   "private": true,
   "description": "TeamSpeak 3 keys for OpenLinkHub Nexus Decks, Stream Deck and OpenDeck",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": { "node": ">=18" },
   "scripts": {
     "test": "node --test test/*.test.js",
     "icons": "python3 scripts/make-icons.py",
