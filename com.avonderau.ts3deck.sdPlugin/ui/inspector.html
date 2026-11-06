@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TeamSpeak 3</title>
+<link rel="stylesheet" href="inspector.css">
+</head>
+<body>
+<section id="action-channel" class="action" hidden>
+  <h2>Channel</h2>
+  <label>Channel
+    <input id="channel" list="channel-list" placeholder="Lobby or Games/Squad 1" autocomplete="off">
+  </label>
+  <datalist id="channel-list"></datalist>
+  <p class="hint">A channel name, or its full path with "/" between levels. Pick from the list while you are connected.</p>
+  <label>Password <input id="password" type="password" autocomplete="off"></label>
+  <label>Key label <input id="label" placeholder="Defaults to the channel name"></label>
+</section>
+
+<section id="action-away" class="action" hidden>
+  <h2>Away</h2>
+  <label>Away message <input id="message" maxlength="80" placeholder="Optional"></label>
+</section>
+
+<section id="action-ptt" class="action" hidden>
+  <h2>Push to talk</h2>
+  <p class="hint">Set TeamSpeak's capture mode to <b>Continuous Transmission</b>. The key opens your mic while held and closes it when released. Decks that only report presses (original Mirabox HSV293S, Ajazz AKP153) cannot hold.</p>
+</section>
+
+<section>
+  <h2>TeamSpeak connection</h2>
+  <p id="status" class="status">Checking…</p>
+  <label>ClientQuery API key <input id="apiKey" type="password" autocomplete="off" placeholder="XXXX-XXXX-…"></label>
+  <p class="hint">In TeamSpeak 3: Tools → Options → Addons → ClientQuery → Settings. Copy the API key shown there. This setting is shared by every TeamSpeak key.</p>
+  <details>
+    <summary>Advanced</summary>
+    <label>Host <input id="host" placeholder="127.0.0.1"></label>
+    <label>Port <input id="port" inputmode="numeric" placeholder="25639"></label>
+  </details>
+  <button id="save" type="button">Save connection</button>
+</section>
+<script src="inspector.js"></script>
+</body>
+</html>

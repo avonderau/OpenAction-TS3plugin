@@ -9,23 +9,13 @@
   "Category": "TeamSpeak 3",
   "CategoryIcon": "imgs/plugin",
   "CodePath": "bin/plugin.js",
+  "PropertyInspectorPath": "ui/inspector.html",
   "SDKVersion": 2,
-  "Software": {
-    "MinimumVersion": "6.4"
-  },
-  "Nodejs": {
-    "Version": "20",
-    "Debug": "disabled"
-  },
+  "Software": { "MinimumVersion": "6.4" },
+  "Nodejs": { "Version": "20", "Debug": "disabled" },
   "OS": [
-    {
-      "Platform": "mac",
-      "MinimumVersion": "12"
-    },
-    {
-      "Platform": "windows",
-      "MinimumVersion": "10"
-    }
+    { "Platform": "mac", "MinimumVersion": "12" },
+    { "Platform": "windows", "MinimumVersion": "10" }
   ],
   "Actions": [
     {
@@ -33,102 +23,48 @@
       "Name": "Toggle microphone",
       "Tooltip": "Mute or unmute your microphone",
       "Icon": "imgs/mic-on",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/mic-on"
-        },
-        {
-          "Image": "imgs/mic-off"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/mic-on" }, { "Image": "imgs/mic-off" }]
     },
     {
       "UUID": "com.avonderau.ts3deck.speakers",
       "Name": "Toggle sound",
       "Tooltip": "Mute or unmute your speakers or headphones",
       "Icon": "imgs/speakers-on",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/speakers-on"
-        },
-        {
-          "Image": "imgs/speakers-off"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/speakers-on" }, { "Image": "imgs/speakers-off" }]
     },
     {
       "UUID": "com.avonderau.ts3deck.away",
       "Name": "Toggle away",
       "Tooltip": "Set yourself away, with an optional message",
       "Icon": "imgs/away-off",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/away-off"
-        },
-        {
-          "Image": "imgs/away-on"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/away-off" }, { "Image": "imgs/away-on" }]
     },
     {
       "UUID": "com.avonderau.ts3deck.ptt",
       "Name": "Push to talk",
       "Tooltip": "Transmit while the key is held (TeamSpeak capture mode: Continuous Transmission)",
       "Icon": "imgs/ptt-idle",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/ptt-idle"
-        },
-        {
-          "Image": "imgs/ptt-live"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/ptt-idle" }, { "Image": "imgs/ptt-live" }]
     },
     {
       "UUID": "com.avonderau.ts3deck.channel",
       "Name": "Join channel",
       "Tooltip": "Switch to a channel on the current server",
       "Icon": "imgs/channel-off",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/channel-off"
-        },
-        {
-          "Image": "imgs/channel-on"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/channel-off" }, { "Image": "imgs/channel-on" }]
     },
     {
       "UUID": "com.avonderau.ts3deck.status",
       "Name": "Status",
       "Tooltip": "Shows your channel and how many people are in it; lights up while you talk",
       "Icon": "imgs/status-idle",
-      "Controllers": [
-        "Keypad"
-      ],
-      "States": [
-        {
-          "Image": "imgs/status-idle"
-        },
-        {
-          "Image": "imgs/status-talking"
-        }
-      ]
+      "Controllers": ["Keypad"],
+      "States": [{ "Image": "imgs/status-idle" }, { "Image": "imgs/status-talking" }]
     }
   ]
 }
