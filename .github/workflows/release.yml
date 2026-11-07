@@ -19,8 +19,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
+  version:
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
     steps:
       - name: Check out release source
         uses: actions/checkout@v4
@@ -44,12 +46,6 @@ jobs:
           fi
           echo "tag=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Set up Rust
-        run: |
-          set -euo pipefail
-          rustup toolchain install stable --profile minimal
-          rustup target add x86_64-unknown-linux-musl aarch64-unknown-linux-musl
-
       - name: Check Cargo and manifest versions
         env:
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
@@ -63,19 +59,26 @@ jobs:
             exit 1
           fi
 
-      - name: Run tests
-        run: cargo test --locked
+  build:
+    needs: version
+    uses: ./.github/workflows/build.yml
 
-      - name: Build installable plugin
-        run: |
-          sh scripts/pack.sh
-          test -s dist/com.avonderau.ts3deck.streamDeckPlugin
-          unzip -t dist/com.avonderau.ts3deck.streamDeckPlugin
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin
+          path: dist/
 
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_TAG: ${{ needs.version.outputs.tag }}
         run: |
           set -euo pipefail
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
