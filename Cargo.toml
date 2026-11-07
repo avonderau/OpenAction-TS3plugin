@@ -1,6 +1,6 @@
 [package]
 name = "ts3deck"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 rust-version = "1.75"
 description = "TeamSpeak 3 keys for OpenLinkHub Nexus Decks, OpenDeck and Stream Deck"
