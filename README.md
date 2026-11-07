@@ -120,3 +120,7 @@ which the release workflow publishes when a `vX.Y.Z` tag is pushed.
   settings in plain text, like any other Stream Deck plugin setting.
 - Plugin output goes to
   `~/.local/state/OpenLinkHub/deck-plugins/logs/com.avonderau.ts3deck.log`.
+
+## License
+
+Licensed under the [MIT License](LICENSE). Copyright (c) 2026 avonderau.
