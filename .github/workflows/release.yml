@@ -44,32 +44,31 @@ jobs:
           fi
           echo "tag=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Set up Rust
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup target add x86_64-unknown-linux-musl aarch64-unknown-linux-musl
 
-      - name: Check package and manifest versions
+      - name: Check Cargo and manifest versions
         env:
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
         run: |
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-          const manifest = JSON.parse(fs.readFileSync('com.avonderau.ts3deck.sdPlugin/manifest.json', 'utf8'));
-          const version = process.env.RELEASE_TAG.slice(1);
-          if (pkg.version !== version || manifest.Version !== version + '.0') {
-            console.error('Version mismatch:', {tag: version, package: pkg.version, manifest: manifest.Version});
-            process.exit(1);
-          }
-          NODE
+          set -euo pipefail
+          version="${RELEASE_TAG#v}"
+          cargo_version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
+          manifest_version=$(jq -r '.Version' com.avonderau.ts3deck.sdPlugin/manifest.json)
+          if [[ "$cargo_version" != "$version" || "$manifest_version" != "$version.0" ]]; then
+            echo "Version mismatch: tag=$version Cargo.toml=$cargo_version manifest=$manifest_version" >&2
+            exit 1
+          fi
 
       - name: Run tests
-        run: npm test
+        run: cargo test --locked
 
       - name: Build installable plugin
         run: |
-          npm run pack
+          sh scripts/pack.sh
           test -s dist/com.avonderau.ts3deck.streamDeckPlugin
           unzip -t dist/com.avonderau.ts3deck.streamDeckPlugin
 
