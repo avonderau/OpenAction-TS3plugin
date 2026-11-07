@@ -7,7 +7,7 @@ The plugin is written for the Deck plugin host in
 It is a standard Stream Deck SDK plugin, so it also runs in OpenDeck and in
 the Elgato Stream Deck app on Windows and macOS.
 
-> **Independent project:** This repository is maintained independently by **avonderau**. It is **not affiliated with, endorsed by, or officially supported by [OpenActionAPI](https://github.com/OpenActionAPI)**. The similarity in names does not imply any organizational relationship.
+> **Independent project:** TeamSpeak 3 for OpenDeck is not part of [OpenActionAPI](https://github.com/OpenActionAPI) and is not affiliated with, maintained by, or endorsed by the OpenActionAPI project. The similar naming does not indicate an official connection.
 
 | Key | Press | Shows |
 | --- | --- | --- |
