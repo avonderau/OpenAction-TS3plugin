@@ -1,3 +1,4 @@
 dist/
-node_modules/
+target/
+com.avonderau.ts3deck.sdPlugin/bin/
 .DS_Store

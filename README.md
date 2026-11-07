@@ -31,12 +31,14 @@ inside TeamSpeak too.
 
 - TeamSpeak 3 client 3.1 or later, with the ClientQuery addon enabled
   (it is on by default).
-- Node.js 18 or later on your `PATH` (the distribution's `nodejs` package is
-  fine). The plugin has no npm dependencies.
+- Linux on x86_64 or aarch64. The plugin is a single static binary, so
+  nothing else needs to be installed (no Node.js).
 
 ## Install
 
-1. Build `dist/com.avonderau.ts3deck.streamDeckPlugin` with `npm run pack`.
+1. Download `com.avonderau.ts3deck.streamDeckPlugin` from the
+   [latest release](https://github.com/avonderau/openaction-ts3plugin/releases/latest),
+   or build it yourself (see below).
 2. In OpenLinkHub, open the Deck editor, go to the **Plugins** tab, choose
    the file and click **Install plugin**, then confirm on your desktop. Or,
    as your desktop user:
@@ -65,14 +67,25 @@ Ajazz AKP153, a press opens and closes the mic at once.
 
 ## Development
 
+The plugin is written in Rust (stable, 1.75 or later).
+
 ```sh
-npm test         # unit tests against a fake ClientQuery server
-npm run pack     # writes dist/com.avonderau.ts3deck.streamDeckPlugin
-npm run icons    # redraws the key icons (needs Python 3 with Pillow)
+cargo test             # unit tests, a fake ClientQuery server, and the binary
+                       # driven through a fake Deck host
+sh scripts/pack.sh     # writes dist/com.avonderau.ts3deck.streamDeckPlugin
+python3 scripts/make-icons.py   # redraws the key icons (needs Pillow)
 ```
 
-`node test/run-mock.js` starts the fake ClientQuery server on a random port
-(API key `KEY-123`), so you can try the keys without TeamSpeak.
+`scripts/pack.sh` builds static binaries for both architectures and needs
+`rustup target add x86_64-unknown-linux-musl aarch64-unknown-linux-musl`.
+The aarch64 build links with `rust-lld`, which ships with Rust.
+
+| Path | What it is |
+| --- | --- |
+| `src/clientquery.rs` | ClientQuery connection, state, commands, reconnects |
+| `src/plugin.rs` | Key actions: what each key does and shows |
+| `src/deck.rs` | WebSocket connection to the Deck host |
+| `com.avonderau.ts3deck.sdPlugin/` | Manifest, icons and settings page |
 
 ## Notes
 
