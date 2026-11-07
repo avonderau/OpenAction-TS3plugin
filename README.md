@@ -7,6 +7,8 @@ The plugin is written for the Deck plugin host in
 It is a standard Stream Deck SDK plugin, so it also runs in OpenDeck and in
 the Elgato Stream Deck app on Windows and macOS.
 
+> **Independent project:** This repository is maintained independently by **avonderau**. It is **not affiliated with, endorsed by, or officially supported by [OpenActionAPI](https://github.com/OpenActionAPI)**. The similarity in names does not imply any organizational relationship.
+
 | Key | Press | Shows |
 | --- | --- | --- |
 | Toggle microphone | Mute or unmute your mic | Mic on / Mic off |
