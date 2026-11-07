@@ -1,3 +1,7 @@
+// The Deck app starts the plugin in the background; on Windows a console
+// program would open a stray terminal window, so build a GUI-subsystem exe.
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 use std::process::ExitCode;
 
 fn main() -> ExitCode {
