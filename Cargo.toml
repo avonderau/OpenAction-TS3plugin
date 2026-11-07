@@ -5,6 +5,7 @@ edition = "2021"
 rust-version = "1.75"
 description = "TeamSpeak 3 keys for OpenLinkHub Nexus Decks, OpenDeck and Stream Deck"
 repository = "https://github.com/avonderau/openaction-ts3plugin"
+license = "MIT"
 publish = false
 
 [dependencies]
