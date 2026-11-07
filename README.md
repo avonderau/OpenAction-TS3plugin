@@ -4,8 +4,8 @@ Deck keys that control the TeamSpeak 3 client and show what it is doing.
 The plugin is written for the Deck plugin host in
 [OpenLinkHub Nexus](https://github.com/avonderau/OpenLinkHub-Nexus)
 ([docs](https://github.com/avonderau/OpenLinkHub-Nexus/blob/main/docs/deck-plugins.md)).
-It is a standard Stream Deck SDK plugin, so it should also run in OpenDeck
-and the Elgato Stream Deck app.
+It is a standard Stream Deck SDK plugin, so it also runs in OpenDeck and in
+the Elgato Stream Deck app on Windows and macOS.
 
 | Key | Press | Shows |
 | --- | --- | --- |
@@ -31,8 +31,13 @@ inside TeamSpeak too.
 
 - TeamSpeak 3 client 3.1 or later, with the ClientQuery addon enabled
   (it is on by default).
-- Linux on x86_64 or aarch64. The plugin is a single static binary, so
-  nothing else needs to be installed (no Node.js).
+- One of:
+  - Linux on x86_64 or aarch64, with OpenLinkHub Nexus or OpenDeck
+  - Windows 10 or later (x86_64), with the Elgato Stream Deck app (6.4 or later) or OpenDeck
+  - macOS 12 or later (Apple Silicon or Intel), with the Elgato Stream Deck app or OpenDeck
+
+The plugin is a single native binary for each platform, so nothing else
+needs to be installed.
 
 ## Install
 
@@ -47,6 +52,9 @@ inside TeamSpeak too.
    /opt/OpenLinkHub/OpenLinkHub --install-deck-plugin dist/com.avonderau.ts3deck.streamDeckPlugin
    ```
 
+   In the **Elgato Stream Deck app**, double-click the downloaded file. In
+   **OpenDeck**, use **Plugins → Install from file**.
+
 3. Put a TeamSpeak action on a key (**Plugin action (experimental)**),
    **Save & Apply**, then open **Plugin settings**.
 4. In TeamSpeak 3, open **Tools → Options → Addons → ClientQuery →
@@ -56,6 +64,16 @@ inside TeamSpeak too.
 For **Join channel**, enter the channel name, or its full path such as
 `Games/Squad 1` when names repeat. The field suggests channels from the
 server you are connected to.
+
+### macOS: if the plugin does not start
+
+The macOS binary is not signed with an Apple Developer ID yet, so macOS may
+block it after a download. If the keys stay blank, clear the quarantine
+flag on the installed plugin and restart the Stream Deck app:
+
+```sh
+xattr -dr com.apple.quarantine ~/Library/Application\ Support/com.elgato.StreamDeck/Plugins/com.avonderau.ts3deck.sdPlugin
+```
 
 ### Push to talk
 
@@ -70,15 +88,24 @@ Ajazz AKP153, a press opens and closes the mic at once.
 The plugin is written in Rust (stable, 1.75 or later).
 
 ```sh
-cargo test             # unit tests, a fake ClientQuery server, and the binary
-                       # driven through a fake Deck host
-sh scripts/pack.sh     # writes dist/com.avonderau.ts3deck.streamDeckPlugin
+cargo test                      # unit tests, a fake ClientQuery server, and the
+                                # binary driven through a fake Deck host
+sh scripts/build.sh             # builds this OS's binary into the plugin folder
+sh scripts/pack.sh              # writes dist/com.avonderau.ts3deck.streamDeckPlugin
 python3 scripts/make-icons.py   # redraws the key icons (needs Pillow)
 ```
 
-`scripts/pack.sh` builds static binaries for both architectures and needs
-`rustup target add x86_64-unknown-linux-musl aarch64-unknown-linux-musl`.
-The aarch64 build links with `rust-lld`, which ships with Rust.
+`scripts/build.sh` needs these Rust targets (`rustup target add …`):
+
+| OS | Targets | Output |
+| --- | --- | --- |
+| Linux | `x86_64-unknown-linux-musl aarch64-unknown-linux-musl` | static binaries; aarch64 links with `rust-lld` |
+| macOS | `aarch64-apple-darwin x86_64-apple-darwin` | one universal binary |
+| Windows (Git Bash) | `x86_64-pc-windows-msvc` | `ts3deck.exe` with a static C runtime |
+
+A local `pack.sh` includes only the binaries you built. CI builds all three
+platforms and packs them into one archive (`.github/workflows/build.yml`),
+which the release workflow publishes when a `vX.Y.Z` tag is pushed.
 
 | Path | What it is |
 | --- | --- |

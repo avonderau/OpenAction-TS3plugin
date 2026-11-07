@@ -1,3 +1,8 @@
 # Cross-build the static aarch64 binary with the linker that ships with Rust.
 [target.aarch64-unknown-linux-musl]
 linker = "rust-lld"
+
+# Link the C runtime statically so Windows users don't need the Visual C++
+# redistributable installed.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]
