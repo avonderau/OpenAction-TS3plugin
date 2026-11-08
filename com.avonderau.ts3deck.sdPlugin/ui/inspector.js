@@ -1,5 +1,6 @@
 // Settings page for the TeamSpeak 3 Deck plugin (Stream Deck property
-// inspector API: the host calls connectElgatoStreamDeckSocket).
+// inspector API: the host calls connectOpenActionSocket, or
+// connectElgatoStreamDeckSocket in the Elgato app).
 (function () {
   'use strict';
   const PREFIX = 'com.avonderau.ts3deck.';
@@ -102,6 +103,7 @@
       }
     };
   };
+  window.connectOpenActionSocket = window.connectElgatoStreamDeckSocket;
   window.connectSocket = window.connectElgatoStreamDeckSocket;
 
   $('save').addEventListener('click', function () {
