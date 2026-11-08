@@ -163,3 +163,24 @@ fn reports_offline_when_nothing_listens() {
     let (_tx, ev) = worker(port, API_KEY);
     wait_state(&ev, |s| s.status == Status::Offline);
 }
+
+#[test]
+fn refresh_retries_now_while_offline() {
+    let port = std::net::TcpListener::bind("127.0.0.1:0")
+        .unwrap()
+        .local_addr()
+        .unwrap()
+        .port();
+    let (tx, ev) = worker(port, API_KEY);
+    wait_state(&ev, |s| s.status == Status::Offline);
+    // Wait out one backoff so the next one is 2 s; a refresh must not wait for it.
+    wait_state(&ev, |s| s.status == Status::Connecting);
+    wait_state(&ev, |s| s.status == Status::Offline);
+    let asked = std::time::Instant::now();
+    tx.send(req(Command::Refresh)).unwrap();
+    wait_state(&ev, |s| s.status == Status::Connecting);
+    assert!(
+        asked.elapsed() < std::time::Duration::from_millis(500),
+        "refresh waited for the backoff"
+    );
+}

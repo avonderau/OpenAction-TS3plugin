@@ -466,7 +466,13 @@ impl Worker {
                 Ok(Request {
                     command: Command::Refresh,
                     ..
-                }) => {}
+                }) => {
+                    // A refresh (Status key, or the computer waking up) retries
+                    // the connection now instead of waiting out the backoff.
+                    if deadline.is_some() {
+                        return Next::Reconnect;
+                    }
+                }
                 Ok(Request { context, .. }) => {
                     let why = match self.state.status {
                         Status::NoKey => "no ClientQuery API key set",
