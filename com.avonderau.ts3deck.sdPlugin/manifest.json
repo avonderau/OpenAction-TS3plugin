@@ -79,6 +79,7 @@
       "UUID": "com.avonderau.ts3deck.ptt",
       "Name": "Push to talk",
       "Tooltip": "Transmit while the key is held (TeamSpeak capture mode: Continuous Transmission)",
+      "SupportedInMultiActions": false,
       "Icon": "imgs/ptt-idle",
       "Controllers": [
         "Keypad"

@@ -29,16 +29,18 @@ pub fn parse_args<I: IntoIterator<Item = String>>(argv: I) -> Result<Args, Strin
     };
     let mut it = argv.into_iter();
     while let Some(flag) = it.next() {
-        let value = match flag.as_str() {
-            "-port" | "-pluginUUID" | "-registerEvent" | "-info" => {
+        // Hosts spell the flags differently ("-pluginUUID", "-pluginuuid").
+        let name = flag.to_ascii_lowercase();
+        let value = match name.as_str() {
+            "-port" | "-pluginuuid" | "-registerevent" | "-info" => {
                 it.next().ok_or(format!("{flag} needs a value"))?
             }
             _ => continue,
         };
-        match flag.as_str() {
+        match name.as_str() {
             "-port" => args.port = value.parse().map_err(|_| format!("bad -port {value}"))?,
-            "-pluginUUID" => args.uuid = value,
-            "-registerEvent" => args.register_event = value,
+            "-pluginuuid" => args.uuid = value,
+            "-registerevent" => args.register_event = value,
             _ => {}
         }
     }
@@ -155,5 +157,15 @@ mod tests {
         );
         assert!(parse_args(strings(&["-port", "x", "-pluginUUID", "a"])).is_err());
         assert!(parse_args(strings(&["-pluginUUID", "a"])).is_err());
+        let a = parse_args(strings(&[
+            "-PORT",
+            "1",
+            "-pluginuuid",
+            "u",
+            "-registerEvent",
+            "r",
+        ]))
+        .unwrap();
+        assert_eq!((a.port, a.uuid.as_str()), (1, "u"));
     }
 }

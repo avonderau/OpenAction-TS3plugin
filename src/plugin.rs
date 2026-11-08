@@ -266,6 +266,9 @@ impl Plugin {
                 self.inspectors.remove(&context);
             }
             "sendToPlugin" => self.on_inspector(&context, &action_uuid, &payload),
+            // After sleep the ClientQuery socket may be dead without an error;
+            // refresh now so the keys don't show stale state.
+            "systemDidWakeUp" => self.request(Command::Refresh, None),
             _ => {}
         }
     }
@@ -359,7 +362,9 @@ impl Plugin {
         }
     }
 
+    /// Logs to stderr (the host's plugin log) and to the host's own log.
     pub fn log(&mut self, message: &str) {
+        eprintln!("ts3deck: {message}");
         self.outbox
             .push(json!({"event": "logMessage", "payload": {"message": message}}));
     }
